@@ -139,17 +139,18 @@ struct LLNode
 class LinkedList
 {
 public:
-    LLNode BaseNode;
     LLNode* final;
-
+    LLNode* first;
     int numEle;
 
-    LinkedList(int d)
+    LinkedList(int d = 0)
     {
+        LLNode* BaseNode = new LLNode();
         numEle = 1;
-        BaseNode.data = d;
-        BaseNode.NodePointer = NULL;
-        final = &BaseNode;
+        BaseNode->data = d;
+        BaseNode->NodePointer = NULL;
+        final = BaseNode;
+        first = BaseNode;
     };
 
     int Read(int pos)
@@ -159,8 +160,8 @@ public:
             return 0;
         }
         int i = 0;
-        LLNode* temp = BaseNode.NodePointer;
-        while(temp != NULL && i < pos - 1)
+        LLNode* temp = first;
+        while(temp != NULL && i < pos)
         {
             temp = temp->NodePointer;
             i++;
@@ -178,11 +179,11 @@ public:
             final->NodePointer = last;
             final = last;
         }
-        else
+        else if(pos > 0)
         {
             int i = 0;
-            LLNode* temp = BaseNode.NodePointer;
-            while(temp != NULL && i < pos - 2)
+            LLNode* temp = first;
+            while(temp != NULL && i < pos - 1)
             {
                 temp = temp->NodePointer;
                 i++;
@@ -194,6 +195,13 @@ public:
             midNode->NodePointer = temp;
             prev->NodePointer = midNode;
         }
+        else
+        {
+            LLNode* start = new LLNode();
+            start->NodePointer = first;
+            start->data = d;
+            first = start;
+        }
         numEle++;
     }
 
@@ -204,8 +212,8 @@ public:
             return false;
         }
         int i = 0;
-        LLNode* temp = BaseNode.NodePointer;
-        while(temp != NULL && i < pos - 1)
+        LLNode* temp = first;
+        while(temp != NULL && i < pos)
         {
             temp = temp->NodePointer;
             i++;
@@ -220,25 +228,34 @@ public:
         {
             return false;
         }
-        int i = 0;
-        LLNode* temp = BaseNode.NodePointer;
-        while(temp != NULL && i < pos - 2)
+        else if(pos != 0)
         {
+            int i = 0;
+            LLNode *temp = first;
+            while (temp != NULL && i < pos - 1)
+            {
+                temp = temp->NodePointer;
+                i++;
+            }
+            LLNode *prev = temp;
             temp = temp->NodePointer;
-            i++;
-        }
-        LLNode* prev = temp;
-        temp = temp->NodePointer;
-        if(pos < numEle - 1)
-        {
-            prev->NodePointer = temp->NodePointer;
-            final = prev->NodePointer;
-            delete temp;
+            if (pos < numEle - 1)
+            {
+                prev->NodePointer = temp->NodePointer;
+                final = prev->NodePointer;
+                delete temp;
+            }
+            else
+            {
+                prev->NodePointer = NULL;
+                final = prev;
+                delete temp;
+            }
         }
         else
         {
-            prev->NodePointer = NULL;
-            final = prev;
+            LLNode* temp = first;
+            first = first->NodePointer;
             delete temp;
         }
         return true;
@@ -248,9 +265,9 @@ public:
     {
         int i = 0;
         string pr = "";
-        pr.append(to_string(BaseNode.data));
+        pr.append(to_string(first->data));
         pr.append(", ");
-        LLNode* temp = BaseNode.NodePointer;
+        LLNode* temp = first->NodePointer;
         while(temp != NULL)
         {
             //cout<<"chec"<<pr<<endl;
@@ -281,12 +298,102 @@ public:
     }
 };
 
+class Stack
+{
+private:
+    LLNode* top;
+    LinkedList stackLL;
+public:
+    int numEle;
+
+    Stack(int d = 0)
+    {
+        top = stackLL.first;
+        top->data = d;
+        numEle = 1;
+    }
+
+    void Push(int d)
+    {
+        if(numEle == 0)
+        {
+            stackLL.first->data = d;
+        }
+        else
+        {
+            stackLL.Insert(d, 0);
+            top = stackLL.first;
+        }
+        numEle++;
+    }
+
+    int Pop()
+    {
+        if(numEle > 1)
+        {
+            int d = 0;
+            d = top->data;
+            stackLL.Remove(0);
+            top = stackLL.first;
+            numEle--;
+            return d;
+        }
+        else if(numEle == 1)
+        {
+            int d = 0;
+            d = top->data;
+            stackLL.Set(0, 0);
+            numEle--;
+            return d;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    int Get_top()
+    {
+        return top->data;
+    }
+
+    string PrintStack()
+    {
+        string pr = "(Top) ";
+        pr.append(stackLL.PrintArray());
+        return pr;
+    }
+
+    void TestStack()
+    {
+        Stack stk(11);
+        cout<<"Stack after pushing 6 elements and a 11: "<<endl;
+        for(int i = 0; i < 6; i++)
+        {
+            stk.Push(i * 12);
+        }
+        cout<<stk.PrintStack()<<endl<<"--------------"<<endl;
+        cout<<"Stack after popping 4 times: "<<endl;
+        for(int i = 0; i < 4; i++)
+        {
+            cout<<"Popped: "<<stk.Pop()<<endl;
+        }
+        cout<<stk.PrintStack()<<endl<<"--------------"<<endl;
+        cout<<"Top element at the stack: "<<stk.Get_top()<<endl;
+        cout<<"Stack after popping 5 more times - overflow: "<<endl;
+        for(int i = 0; i < 5; i++)
+        {
+            cout<<stk.numEle;
+            cout<<"Popped: "<<stk.Pop()<<endl;
+        }
+        cout<<"Stack pops return 0 when stack is empty."<<endl;
+    }
+};
+
 int main()
 {
-    IntDynArray dArr;
-    dArr.TestArray();
-    cout<<"-------------------"<<endl;
-    LinkedList llist(1);
-    llist.TestLL();
+    system("cls");
+    Stack stk(1);
+    stk.TestStack();
     return 0;
 }
