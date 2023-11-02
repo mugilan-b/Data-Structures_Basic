@@ -393,7 +393,5 @@ public:
 int main()
 {
     system("cls");
-    Stack stk(1);
-    stk.TestStack();
     return 0;
 }
