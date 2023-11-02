@@ -159,6 +159,10 @@ public:
         {
             return 0;
         }
+        if(pos == numEle - 1)
+        {
+            return final->data;
+        }
         int i = 0;
         LLNode* temp = first;
         while(temp != NULL && i < pos)
@@ -352,7 +356,7 @@ public:
         }
     }
 
-    int Get_top()
+    int Peek()
     {
         return top->data;
     }
@@ -379,7 +383,7 @@ public:
             cout<<"Popped: "<<stk.Pop()<<endl;
         }
         cout<<stk.PrintStack()<<endl<<"--------------"<<endl;
-        cout<<"Top element at the stack: "<<stk.Get_top()<<endl;
+        cout<<"Peeking stack: "<<stk.Peek()<<endl;
         cout<<"Stack after popping 5 more times - overflow: "<<endl;
         for(int i = 0; i < 5; i++)
         {
@@ -387,6 +391,82 @@ public:
             cout<<"Popped: "<<stk.Pop()<<endl;
         }
         cout<<"Stack pops return 0 when stack is empty."<<endl;
+    }
+};
+
+class Queue
+{
+private:
+    LLNode* tail;
+    LinkedList qLL;
+public:
+    int numEle;
+
+    Queue(int d = 0)
+    {
+        tail = qLL.first;
+        numEle = 1;
+    }
+
+    void Push(int d)
+    {
+        if(numEle == 0)
+        {
+            qLL.first->data = d;
+        }
+        else
+        {
+            qLL.Insert(d, 0);
+            tail = qLL.first;
+        }
+        numEle++;
+    }
+
+    int Pop()
+    {
+        int d = 0;
+        if(numEle != 0)
+        {
+            d = qLL.Read(numEle - 1);
+            qLL.Remove(numEle - 1);
+            numEle--;
+        }
+        return d;
+    }
+
+    int Peek()
+    {
+        return qLL.Read(numEle - 1);
+    }
+
+    string PrintQ()
+    {
+        string pr = "(Tail) ";
+        pr.append(qLL.PrintArray());
+        pr.append(" (Head)");
+        return pr;
+    }
+
+    void TestQ()
+    {
+        Queue q(1);
+        for(int i = 1; i < 5; i++)
+        {
+            q.Push(2 * i);
+        }
+        cout<<"Queue is: "<<q.PrintQ()<<endl<<"----------"<<endl;
+        for(int i = 0; i < 3; i++)
+        {
+            cout<<"Popped: "<<q.Pop()<<endl;
+        }
+        cout<<"Queue after popping 3 times: "<<q.PrintQ()<<endl;
+        cout<<"Peeking head: "<<q.Peek()<<endl;
+        cout<<"Queue after over-popping: "<<endl;
+        for(int i = 0; i < 4; i++)
+        {
+            cout<<"Popped: "<<q.Pop()<<endl;
+        }
+        cout<<"Queue pop returns 0 when empty."<<endl;
     }
 };
 
