@@ -65,16 +65,11 @@ public:
                 numEle++;
                 return true;
             }
-            else if(pos == numEle)
-            {
-                selfArray[pos] = b;
-                numEle++;
-                return true;
-            }
             else
             {
-                // Unsuccessful Append
-                return false;
+                selfArray[numEle] = b;
+                numEle++;
+                return true;
             }
         }
         else
