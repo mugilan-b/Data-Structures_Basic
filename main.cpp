@@ -470,6 +470,428 @@ public:
     }
 };
 
+struct BTNode
+{
+    int data;
+    BTNode* left;
+    BTNode* right;
+};
+
+struct PQNode
+{
+    BTNode* btp;
+    PQNode* NodePointer;
+};
+
+class PQueue
+{
+private:
+    PQNode* head;
+    PQNode* tail;
+    //Push at tail, Pop at head
+public:
+    int numEle;
+
+    PQueue(BTNode* d)
+    {
+        numEle = 1;
+        head = new PQNode();
+        tail = head;
+        head->btp = d;
+        head->NodePointer = NULL;
+    }
+
+    void Push(BTNode* d)
+    {
+        if(numEle > 0)
+        {
+            PQNode* temp = new PQNode();
+            tail->NodePointer = temp;
+            temp->btp = d;
+            tail = temp;
+        }
+        else
+        {
+            head->btp = d;
+
+        }
+        numEle++;
+    }
+
+    BTNode* Pop()
+    {
+        if(numEle > 1)
+        {
+            BTNode* d = NULL;
+            d = head->btp;
+            PQNode* temp = head;
+            head = head->NodePointer;
+            delete temp;
+            numEle--;
+            return d;
+        }
+        else if(numEle == 1)
+        {
+            BTNode* d = NULL;
+            d = head->btp;
+            head->btp = NULL;
+            numEle--;
+            return d;
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+};
+
+class BinaryTree
+{
+private:
+    BTNode* MinPointer(BTNode* root)
+    {
+        // Returns address of the minimum element below said root
+        BTNode* temp = root;
+        //BTNode* temp2_prev = temp2;
+        while(temp->left != NULL)
+        {
+            temp = temp->left;
+        }
+        return temp;
+    }
+
+    BTNode* MaxPointer(BTNode* root)
+    {
+        // Returns address of the max element below said root
+        BTNode* temp = root;
+        //BTNode* temp2_prev = temp2;
+        while(temp->right != NULL)
+        {
+            temp = temp->right;
+        }
+        return temp;
+    }
+
+public:
+    BTNode rootNode;
+    int numEle;
+
+    BinaryTree(int d = 0)
+    {
+        rootNode.data = d;
+        rootNode.right = NULL;
+        rootNode.left = NULL;
+        numEle = 1;
+    }
+
+    void Insert(int d)
+    {
+        BTNode* temp = &rootNode;
+        while(true)
+        {
+            if(d > temp->data)
+            {
+                if(temp->right == NULL)
+                {
+                    BTNode* newnode = new BTNode();
+                    newnode->data = d;
+                    newnode->right = NULL;
+                    newnode->left = NULL;
+                    temp->right = newnode;
+                    numEle++;
+                    break;
+                }
+                else
+                {
+                    temp = temp->right;
+                }
+            }
+            else
+            {
+                if(temp->left == NULL)
+                {
+                    BTNode* newnode = new BTNode();
+                    newnode->data = d;
+                    newnode->right = NULL;
+                    newnode->left = NULL;
+                    temp->left = newnode;
+                    numEle++;
+                    break;
+                }
+                else
+                {
+                    temp = temp->left;
+                }
+            }
+        }
+    }
+
+    void SetRoot(int d)
+    {
+        rootNode.data = d;
+    }
+
+    bool Search(int d, bool retpoit = false, BTNode** searched = NULL, BTNode** prev2 = NULL, bool* wentr = NULL)
+    {
+        BTNode* temp = &rootNode;
+        BTNode* prev = temp;
+        bool wentright = false;
+        while(true)
+        {
+            if(d > temp->data)
+            {
+                if(temp->right == NULL)
+                {
+                    //Value Absent
+                    return false;
+                    break;
+                }
+                else
+                {
+                    temp = temp->right;
+                    wentright = true;
+                    if(d == temp->data)
+                    {
+                        if(retpoit)
+                        {
+                            *prev2 = prev;
+                            *searched = temp;
+                            *wentr = wentright;
+                        }
+                        return true;
+                        //Found
+                    }
+                }
+            }
+            else if (d < temp->data)
+            {
+                if(temp->left == NULL)
+                {
+                    //Value absent
+                    return false;
+                    break;
+                }
+                else
+                {
+                    temp = temp->left;
+                    wentright = false;
+                    if(d == temp->data)
+                    {
+                        if(retpoit)
+                        {
+                            *prev2 = prev;
+                            *searched = temp;
+                            *wentr = wentright;
+                        }
+                        return true;
+                        //Found
+                    }
+                }
+            }
+            else
+            {
+                return true;
+            }
+            prev = temp;
+        }
+    }
+
+    bool Remove(int d)
+    {
+        BTNode* temp = NULL;
+        BTNode* prev = NULL;
+        bool wentright = false;
+        if(d == rootNode.data)
+        {
+            return false;
+        }
+        bool found = Search(d, true, &temp, &prev, &wentright);
+        if(!found)
+        {
+            return false;
+        }
+        if(temp->right == NULL)
+        {
+            if(temp->left == NULL)
+            {
+                //Leaf node
+                if(wentright)
+                {
+                    prev->right = NULL;
+                }
+                else
+                {
+                    prev->left = NULL;
+                }
+                delete temp;
+                numEle--;
+                return true;
+            }
+            else
+            {
+                //Only left subtree present
+                BTNode* temp2 = MaxPointer(temp->left);
+                float min = temp2->data;
+                this->Remove(min);
+                temp->data = min;
+                numEle--;
+                return true;
+            }
+        }
+        else
+        {
+            //Right subtree present
+            BTNode* temp2 = MinPointer(temp->right);
+            float min = temp2->data;
+            this->Remove(min);
+            temp->data = min;
+            numEle--;
+            return true;
+        }
+        /*
+        BTNode* temp = &rootNode;
+        BTNode* prev = temp;
+        bool wentright = false;
+        while(true)
+        {
+            if(d > temp->data)
+            {
+                if(temp->right == NULL)
+                {
+                    //Value Absent
+                    return false;
+                    break;
+                }
+                else
+                {
+                    prev = temp;
+                    temp = temp->right;
+                    wentright = true;
+                }
+            }
+            else if (d < temp->data)
+            {
+                if(temp->left == NULL)
+                {
+                    //Value absent
+                    return false;
+                    break;
+                }
+                else
+                {
+                    prev = temp;
+                    temp = temp->left;
+                    wentright = false;
+                }
+            }
+            else
+            {
+                if(temp->left == NULL)
+                {
+                    if(temp->right == NULL)
+                    {
+                        //Leaf node
+                        if(wentright)
+                        {
+                            prev->right = NULL;
+                        }
+                        else
+                        {
+                            prev->left = NULL;
+                        }
+                        //delete temp;
+                    }
+                    else
+                    {
+                        //Only Right subtree present
+                        BTNode* temp2 = temp->right;
+                        BTNode* temp2_prev = temp2;
+                        if(temp2->left == NULL)
+                        {
+                            temp->data = temp2->data;
+                            temp->right = NULL;
+                            delete temp2;
+                            break;
+                        }
+                        while(true)
+                        {
+                            temp2 = temp2->left;
+                            if(temp2->left == NULL)
+                            {
+                                //Reached leaf
+                                break;
+                            }
+                            temp2_prev = temp2;
+                        }
+                        temp->data = temp2->data;
+                        temp2_prev->left = NULL;
+                        delete temp2;
+                    }
+                }
+                else
+                {
+                    if(temp->right == NULL)
+                    {
+                        //Only Left subtree present
+
+                    }
+                    else
+                    {
+                        //Both subtrees present
+
+                        temp->data = temp2->data;
+                        temp2_prev->left = NULL;
+                        delete temp2;
+                    }
+                }
+                delete temp;
+                return true;
+                //Found and deleted
+            }
+        }
+        numEle--;
+         */
+    }
+
+    string PrintTree()
+    {
+        BTNode* temp = NULL;
+        PQueue PQ(&rootNode);
+        string str = "(ROOT) ";
+        while(PQ.numEle > 0)
+        {
+            temp = PQ.Pop();
+            if(temp->left != NULL)
+            {
+                PQ.Push(temp->left);
+            }
+            if(temp->right != NULL)
+            {
+                PQ.Push(temp->right);
+            }
+            str.append(to_string(temp->data));
+            str.append(", ");
+        }
+        return str;
+    }
+
+    void TestBT()
+    {
+        BinaryTree BT(15);
+        BT.Insert(10);
+        BT.Insert(4);
+        BT.Insert(12);
+        BT.Insert(19);
+        BT.Insert(17);
+        BT.Insert(21);
+        cout<<"Binary tree is: "<<endl;
+        cout<<BT.PrintTree();
+        cout<<"BT after removing element 10: "<<endl;
+        BT.Remove(10);
+        cout<<BT.PrintTree();
+    }
+};
+
 int main()
 {
     system("cls");
