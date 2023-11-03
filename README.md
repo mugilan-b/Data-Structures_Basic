@@ -1,4 +1,22 @@
 Included are classes of common basic Data structures. Note that they can store only **INTEGERS**. <br>
+
+# To-do: <br>
+- Add search function in IntDynArray and LinkedList <br>
+- Improve documentation in code <br>
+- Make this a header file <br>
+- Improve BinaryTree
+
+***
+
+# Changelog: <br>
+- v0.5 - Added more instructions and details in Readme.md <br>
+- v0.4 - Added Binary trees and required classes/structures for it <br>
+- v0.3 - Added Queues, Improved Stack <br>
+- v0.2 - Added Stack and fixed Linked List logic <br>
+- v0.1 - Included Linked List and Dynamic Array <br>
+
+***
+
 # Data structures: <br>
 ## Dynamic array (IntDynArray): <br> 
 Not really dynamic per se. It is a normal array with the following operations:
@@ -18,6 +36,8 @@ Not really dynamic per se. It is a normal array with the following operations:
 ### Limitations, and possible further improvements: <br>
 - Maximum elements is given by global var **const int ArraySize**. Set to 1000 by default. Array cannot hold more elements. <br>
 - Can add a search function. <br>
+
+***
 
 ## Linked List (LinkedList): <br>
 A Linked list with one directional traversing capabilities.
@@ -39,6 +59,8 @@ A Linked list with one directional traversing capabilities.
 ### Limitations, and possible further improvements: <br>
 - Can add a search function.
 
+***
+
 ## Stack (Stack): <br>
 A Stack implemented with the aforementioned Linked List.
 
@@ -56,6 +78,8 @@ A Stack implemented with the aforementioned Linked List.
 ### Limitations, and possible further improvements: <br>
 - None come to mind
 
+***
+
 ## Queue (Queue): <br>
 A Queue implemented with the aforementioned Linked List.
 
@@ -72,6 +96,8 @@ A Queue implemented with the aforementioned Linked List.
 
 ### Limitations, and possible further improvements: <br>
 - None come to mind
+
+***
 
 ## Binary Search Tree (BinaryTree): <br>
 A Binary Search Tree implemented with an inbuilt Linked List & a custom Node Queue to implement Breadth-first algorithms. Left is smaller, right is larger.
@@ -96,15 +122,4 @@ A Binary Search Tree implemented with an inbuilt Linked List & a custom Node Que
 - Methods to find maximum and minimum elements of the tree. Most of the work is done already. <br>
 - Methods to return subtrees.
 
-# To-do: <br>
-- Add search function in IntDynArray and LinkedList <br>
-- Improve documentation in code <br>
-- Make this a header file <br>
-- Improve BinaryTree
-
-# Changelog: <br>
-- v0.5 - Added more instructions and details in Readme.md <br>
-- v0.4 - Added Binary trees and required classes/structures for it <br>
-- v0.3 - Added Queues, Improved Stack <br>
-- v0.2 - Added Stack and fixed Linked List logic <br>
-- v0.1 - Included Linked List and Dynamic Array <br>
+***
